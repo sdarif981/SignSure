@@ -249,16 +249,16 @@ SignSure requires modern browsers with Web Crypto API support:
 4. Push to branch: `git push origin feature-name`
 5. Create Pull Request
 
-## 📄 License
+<!-- ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details. -->
 
-## 🆘 Support
+<!-- ## 🆘 Support
 
 For questions, issues, or contributions:
 - Create an issue on GitHub
 - Contact the development team
-- Review documentation and code comments
+- Review documentation and code comments -->
 
 ## 🔮 Future Enhancements
 
