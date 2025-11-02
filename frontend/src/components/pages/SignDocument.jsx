@@ -20,8 +20,30 @@ const SignDocument = () => {
   const [uploadCount, setUploadCount] = useState(0);
 
   useEffect(() => {
-    setHasKey(!!localStorage.getItem("encryptedPrivateKey"));
-  }, [uploadCount]);
+  const checkKey = () => {
+    const key = localStorage.getItem("encryptedPrivateKey");
+    setHasKey(!!key);
+  };
+
+  // Listen for cross-tab/localStorage updates
+  const handleStorageChange = (e) => {
+    if (e.key === "encryptedPrivateKey") {
+      checkKey();
+    }
+  };
+
+  
+  const interval = setInterval(checkKey, 1000);
+
+  window.addEventListener("storage", handleStorageChange);
+  checkKey();
+
+  return () => {
+    window.removeEventListener("storage", handleStorageChange);
+    clearInterval(interval);
+  };
+}, []);
+
 
   // ---------- Helpers ----------
   const abToHex = (buf) =>
