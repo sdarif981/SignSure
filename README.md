@@ -1,4 +1,9 @@
 # SignSure - Secure Digital Document Signing Platform
+<p align="left">
+  <a href="https://sign-sure.vercel.app">
+    <img src="https://img.shields.io/badge/Live%20Demo-SignSure-blue?style=for-the-badge" />
+  </a>
+</p>
 
 A modern, secure document signing platform built with client-side cryptography that ensures your private keys never leave your device. SignSure provides cryptographically secure tools for signing and verifying documents while maintaining full data ownership and zero trust dependency.
 
