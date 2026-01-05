@@ -109,7 +109,10 @@ const VerifyDocument = () => {
       <Navbar />
       <main className="min-h-[calc(100vh-150px)] bg-gray-50 py-16 px-4 flex flex-col items-center">
         <div className="w-full max-w-2xl bg-white border border-[#002D74]/10 rounded-xl shadow-xl px-8 py-10 space-y-10 relative z-10">
-          <h1 className="text-3xl font-bold text-[#002D74] text-center">Verify Signed Document</h1>
+          <h1 className="text-3xl font-bold text-[#002D74] text-center mb-2">Verify Signed Document</h1>
+          <p className="text-center text-gray-600 text-sm mb-6">
+            Upload the original document, signature file, and public key to verify authenticity
+          </p>
 
           {/* Original Document upload */}
           <div className="space-y-4">

@@ -31,12 +31,15 @@ const Contact = () => {
       <Navbar />
       <main className="bg-gray-50 text-[#002D74] min-h-[calc(100vh-160px)] py-20 px-6 lg:px-16">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl font-bold text-center mb-6">Contact Us</h1>
-          <p className="text-center text-gray-600 mb-10">
-            Have questions or ideas? We’re always open to feedback and collaboration.
-          </p>
+          <div className="text-center mb-10">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">Contact Us</h1>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Have questions or ideas? We're always open to feedback and collaboration.
+            </p>
+          </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="bg-white rounded-xl shadow-lg p-8 md:p-12">
+            <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <Input
                 name="name"
@@ -64,11 +67,12 @@ const Contact = () => {
             />
             <Button
               type="submit"
-              className="bg-[#002D74] hover:bg-[#001e52] text-white w-full sm:w-auto px-6 py-3"
+              className="bg-[#002D74] hover:bg-[#001e52] text-white w-full sm:w-auto px-8 py-3 text-base"
             >
               Send Message
             </Button>
           </form>
+          </div>
         </div>
       </main>
       <Footer />

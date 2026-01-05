@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
@@ -19,8 +19,47 @@ const SignDocument = () => {
   const [hasKey, setHasKey] = useState(false);
   const [uploadCount, setUploadCount] = useState(0);
 
+  // Check for encrypted private key in localStorage
+  const checkForKey = useCallback(() => {
+    const keyExists = !!localStorage.getItem("encryptedPrivateKey");
+    setHasKey(keyExists);
+  }, []);
+
   useEffect(() => {
-    setHasKey(!!localStorage.getItem("encryptedPrivateKey"));
+    // Initial check
+    checkForKey();
+
+    // Listen for storage events (changes from other tabs/windows)
+    const handleStorageChange = (e) => {
+      if (e.key === "encryptedPrivateKey" || e.key === null) {
+        checkForKey();
+      }
+    };
+    window.addEventListener("storage", handleStorageChange);
+
+    // Poll localStorage periodically to detect changes made in same tab (DevTools)
+    // This is necessary because storage events don't fire for same-tab changes
+    const intervalId = setInterval(() => {
+      checkForKey();
+    }, 500); // Check every 500ms
+
+    // Also check when window regains focus (user might have removed key in DevTools)
+    const handleFocus = () => {
+      checkForKey();
+    };
+    window.addEventListener("focus", handleFocus);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("focus", handleFocus);
+      clearInterval(intervalId);
+    };
+  }, [checkForKey]);
+
+  // Also check when uploadCount changes (after QR upload)
+  useEffect(() => {
+    checkForKey();
   }, [uploadCount]);
 
   // ---------- Helpers ----------
@@ -210,10 +249,24 @@ const SignDocument = () => {
         <div className="w-full max-w-2xl bg-white border border-[#002D74]/10 rounded-xl shadow-xl px-8 py-10 space-y-10 relative z-10">
           <h1 className="text-3xl font-bold text-[#002D74] text-center">Sign Your Document</h1>
 
-          <div className="bg-yellow-100 text-yellow-800 p-3 rounded-md text-sm text-center">
-            {hasKey
-              ? "Encrypted private key is already loaded."
-              : "No encrypted private key found. Please upload a QR code to load it."}
+          <div className={`p-4 rounded-lg text-sm ${
+            hasKey 
+              ? "bg-green-50 text-green-800 border border-green-200" 
+              : "bg-yellow-50 text-yellow-800 border border-yellow-200"
+          }`}>
+            <div className="flex items-start gap-2">
+              <span className="font-semibold">{hasKey ? "✓" : "!"}</span>
+              <div>
+                <p className="font-medium mb-1">
+                  {hasKey ? "Encrypted private key is loaded" : "Private key required"}
+                </p>
+                <p className="text-xs opacity-90">
+                  {hasKey 
+                    ? "You can now sign documents. Make sure to enter your passphrase to decrypt the key."
+                    : "Upload your QR code backup to load your encrypted private key."}
+                </p>
+              </div>
+            </div>
           </div>
 
           {/* Document upload */}

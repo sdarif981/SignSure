@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import logo from "../../assets/logo.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { RxHamburgerMenu } from "react-icons/rx";
 import {
   DropdownMenu,
@@ -13,12 +13,12 @@ import useUserStore from "@/store/userStore";
 import QRCode from "qrcode";
 import axios from "axios";
 import { toast } from "sonner";
-import { KEY_API } from "@/constants/constant";
+import { KEY_API, USER_API } from "@/constants/constant";
 const Navbar = () => {
   const [showMenu, setShowMenu] = useState(false);
   const user = useUserStore((state) => state.user);
   const setUser = useUserStore((state) => state.setUser);
-  const encryptedPrivateKey = localStorage.getItem("encryptedPrivateKey");
+  const navigate = useNavigate();
 
   const handleDownloadQR = async () => {
     const encryptedPrivateKey = localStorage.getItem("encryptedPrivateKey");
@@ -80,9 +80,19 @@ const Navbar = () => {
     }
   };
 
-  const handleLogout = () => {
-    setUser(null);
-    navigate("/login");
+  const handleLogout = async () => {
+    try {
+      // Call backend logout endpoint to clear cookie
+      await axios.get(`${USER_API}/logout`, { withCredentials: true });
+    } catch (error) {
+      console.error("Logout error:", error);
+      // Continue with logout even if backend call fails
+    } finally {
+      // Clear user state only - keep encryptedPrivateKey in localStorage
+      // Private key persists unless manually removed from dev tools
+      setUser(null);
+      navigate("/login");
+    }
   };
 
   const linkClass = `relative pb-1 after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-0 
@@ -110,9 +120,9 @@ const Navbar = () => {
 
           {user ? (
             <div className="flex items-center gap-4">
-              <Link onClick={handleLogout} className={linkClass}>
+              <button onClick={handleLogout} className={linkClass}>
                 Logout
-              </Link>
+              </button>
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>

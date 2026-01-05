@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import { Button } from "../ui/button";
@@ -6,6 +7,7 @@ import useUserStore from "@/store/userStore";
 
 const Home = () => {
   const user = useUserStore((state) => state.user);
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50 text-[#002D74]">
@@ -23,7 +25,7 @@ const Home = () => {
             </p>
             <Button
               className="bg-[#002D74] text-white hover:bg-[#001e52]"
-              onClick={() => window.location.href = "/sign-page"}
+              onClick={() => navigate("/sign-page")}
             >
               Go to Dashboard
             </Button>
@@ -42,14 +44,14 @@ const Home = () => {
               <div className="flex gap-4 flex-wrap justify-center">
                 <Button
                   className="bg-[#002D74] text-white hover:bg-[#001e52]"
-                  onClick={() => window.location.href = "/register"}
+                  onClick={() => navigate("/register")}
                 >
                   Get Started
                 </Button>
                 <Button
                   variant="outline"
                   className="border-[#002D74] text-[#002D74] hover:bg-[#002D74] hover:text-white"
-                  onClick={() => window.location.href = "/login"}
+                  onClick={() => navigate("/login")}
                 >
                   Login
                 </Button>
