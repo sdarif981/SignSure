@@ -16,6 +16,9 @@ app.use(cors({
   credentials: true
 }));
 app.use(cookieParser());
+app.get("/api/health", (req, res) => {
+  res.status(200).json({ status: "active", message: "Server is awake" });
+});
 app.use("/api/user",userRoute);
 app.use("/api/key",keyRoute);
 
