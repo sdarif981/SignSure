@@ -6,18 +6,19 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { USER_API } from "@/constants/constant";
 import { toast } from "sonner";
-import Navbar from "../pages/Navbar";
 import Footer from "../pages/Footer";
 import useUserStore from "@/store/userStore";
-
 
 const Login = () => {
   const [showPass, setShowPass] = useState(false);
   const [animating, setAnimating] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({ email: "", password: "" });
+
   const navigate = useNavigate();
   const user = useUserStore((state) => state.user);
   const setUser = useUserStore((state) => state.setUser);
+
   useEffect(() => {
     if (user) {
       navigate("/");
@@ -42,44 +43,50 @@ const Login = () => {
     }
 
     try {
-      const res = await axios.post(`${USER_API}/login`, formData,{withCredentials:true});
+      setLoading(true);
+
+      const res = await axios.post(
+        `${USER_API}/login`,
+        formData,
+        { withCredentials: true }
+      );
+
       toast.success("Login successful!");
       setUser(res.data.user);
-      console.log("Login response:", res.data.user);
       navigate("/");
     } catch (error) {
       const errorMessage =
         error.response?.data?.message || "Login failed. Please try again.";
       toast.error(errorMessage);
-      console.error("Login error:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <>
-      {/* Optional Navbar */}
-      {/* <Navbar /> */}
-        <style>
-           {`
-             .diagonal-pattern::before {
-               content: "";
-               position: absolute;
-               top: -50%;
-               left: -50%;
-               width: 200%;
-               height: 200%;
-               background-image: url(${logo1});
-               background-size: 60px 60px;
-               background-repeat: repeat;
-               background-position: center;
-               opacity: 0.04;
-               transform: rotate(-15deg);
-               z-index: 0;
-               pointer-events: none;
-             }
-           `}
-         </style>
-      <section  className="relative diagonal-pattern min-h-screen flex flex-col justify-center items-center px-4 bg-gray-50 overflow-hidden">
+      <style>
+        {`
+          .diagonal-pattern::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background-image: url(${logo1});
+            background-size: 60px 60px;
+            background-repeat: repeat;
+            background-position: center;
+            opacity: 0.04;
+            transform: rotate(-15deg);
+            z-index: 0;
+            pointer-events: none;
+          }
+        `}
+      </style>
+
+      <section className="relative diagonal-pattern min-h-screen flex flex-col justify-center items-center px-4 bg-gray-50 overflow-hidden">
         <div
           className={`bg-white flex flex-col md:flex-row rounded-2xl shadow-lg max-w-4xl w-full overflow-hidden transition duration-300 ${
             animating ? "opacity-0 scale-95" : "opacity-100 scale-100"
@@ -101,6 +108,7 @@ const Login = () => {
                 onChange={handleChange}
                 className="p-3 rounded-xl border"
               />
+
               <div className="relative">
                 <input
                   type={showPass ? "text" : "password"}
@@ -118,11 +126,22 @@ const Login = () => {
                   {showPass ? <FaEyeSlash /> : <FaEye />}
                 </button>
               </div>
+
               <button
                 type="submit"
-                className="bg-[#002D74] rounded-xl text-white py-2 hover:scale-105 duration-300"
+                disabled={loading}
+                className={`bg-[#002D74] rounded-xl text-white py-2 flex items-center justify-center gap-2
+                  ${loading ? "opacity-70 cursor-not-allowed" : "hover:scale-105"}
+                  duration-300`}
               >
-                Login
+                {loading ? (
+                  <>
+                    <span className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                    Logging in...
+                  </>
+                ) : (
+                  "Login"
+                )}
               </button>
             </form>
 
@@ -143,11 +162,7 @@ const Login = () => {
 
           {/* Visual Side */}
           <div className="md:w-1/2 hidden md:flex flex-col items-center justify-center bg-[#002D74] text-white p-8">
-            <img
-              src={logo}
-              alt="SignSure Logo"
-              className="h-20 w-auto mb-4"
-            />
+            <img src={logo} alt="SignSure Logo" className="h-20 w-auto mb-4" />
             <p className="text-lg font-semibold text-center">
               “Your privacy, your keys. SignSure ensures your documents stay yours.”
             </p>
@@ -155,7 +170,6 @@ const Login = () => {
         </div>
       </section>
 
-      {/* Optional Footer */}
       <Footer />
     </>
   );
