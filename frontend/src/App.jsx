@@ -1,6 +1,7 @@
 import { BrowserRouter, Route,  Routes } from "react-router-dom"
 import Login from "./components/auth/Login"
 import Register from "./components/auth/Register"
+import ForgotPassword from "./components/auth/ForgotPassword"
 import Navbar from "./components/pages/Navbar"
 import Home from "./components/pages/Home"
 import SignDocument from "./components/pages/SignDocument"
@@ -21,6 +22,7 @@ function App() {
     <Routes>
       <Route path="/login" element={<Login/>} />
        <Route path="/register" element={<Register/>} />
+       <Route path="/forgot-password" element={<ForgotPassword/>} />
        <Route path="/" element={<Home/>}/>
        <Route path="/sign-page" element={<Protected><SignDocument/></Protected>}/>
        <Route path="/about" element={<About/>}/>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import logo from "../../assets/logo1.png";
 import logo1 from "../../assets/logo.png";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import { USER_API } from "@/constants/constant";
 import { toast } from "sonner";
@@ -146,7 +146,7 @@ const Login = () => {
             </form>
 
             <div className="text-xs mt-4 text-[#002D74] border-b py-2">
-              <a href="#">Forgot your password?</a>
+              <Link to="/forgot-password">Forgot your password?</Link>
             </div>
 
             <div className="mt-4 text-sm flex justify-between items-center text-[#002D74]">

@@ -181,9 +181,7 @@ const Register = () => {
               </form>
             )}
 
-            <div className="text-xs mt-6 border-b border-[#002D74] py-2 text-[#002D74]">
-              <a href="#">Forgot your password?</a>
-            </div>
+           
 
             <div className="mt-4 text-sm flex justify-between items-center text-[#002D74]">
               <p>Already have an account?</p>
